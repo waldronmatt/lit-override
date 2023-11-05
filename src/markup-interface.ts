@@ -16,14 +16,11 @@ export const addMarkupToElements = (
     return;
   }
 
-  const templateElement = document.createElement("template");
   if (!template.strings[0]) {
     console.error(
-      `The property 'strings[0]' on 'template' is undefined. Please check if this is still supported by Lit.`
+      `The property 'strings[0]' on 'template' does not exist. Please check if this is still supported by Lit.`
     );
-  } else {
-    // template.strings[0] is fragile because this relies on Lit's interal template API
-    templateElement.innerHTML = template.strings[0];
+    return;
   }
 
   elements.forEach((element: Element) => {
@@ -37,14 +34,23 @@ export const addMarkupToElements = (
           .then(() => {
             if (!("_template" in element)) {
               console.error(
-                `Property '_template' does not existing on element ${name}`
+                `Property '_template' does not existing on element ${name}. Please add it.`
               );
+              return;
             } else {
+              const templateElement = document.createElement("template");
+              // template.strings[0] is fragile because this relies on Lit's interal template API
+              templateElement.innerHTML = template.strings[0];
               // assign the template override to the w-box `_template` prop
               (element as any)._template = templateElement;
             }
           })
-          .catch((error) => console.error(error));
+          .catch((error) => {
+            console.error(
+              `There was an error with component registration: ${error}`
+            );
+            return;
+          });
       }
     }
   });

@@ -20,6 +20,13 @@ export const addStyleSheetToElements = (
     return;
   }
 
+  if (!style.cssText) {
+    console.error(
+      `The property 'cssText' on 'style' does not exist. Please check if this is still supported by Lit.`
+    );
+    return;
+  }
+
   elements.forEach((element: Element) => {
     if (element) {
       const name = element.nodeName.toLowerCase();
@@ -44,7 +51,12 @@ export const addStyleSheetToElements = (
               (element as any).renderRoot.appendChild(styleEl);
             }
           })
-          .catch((error) => console.error(error));
+          .catch((error) => {
+            console.error(
+              `There was an error with component registration: ${error}`
+            );
+            return;
+          });
       }
     }
   });
