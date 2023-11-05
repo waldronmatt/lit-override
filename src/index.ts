@@ -4,7 +4,7 @@ import { repeat } from "lit/directives/repeat.js";
 import { until } from "lit/directives/until.js";
 import { addStyleSheetToElements } from "./stylesheet-interface.js";
 import { addMarkupToElements } from "./markup-interface.js";
-import "./box.js";
+import "./w-box.js";
 
 @customElement("w-promo")
 export class Promo extends LitElement {

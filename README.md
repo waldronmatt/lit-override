@@ -13,7 +13,7 @@ import { html, css, TemplateResult, CSSResult, LitElement } from "lit";
 import { customElement } from "lit/decorators.js";
 import { addStyleSheetToElements } from "./stylesheet-interface.js";
 import { addMarkupToElements } from "./markup-interface.js";
-import "./box.js";
+import "./w-box.js";
 
 @customElement("app")
 export class App extends LitElement {
