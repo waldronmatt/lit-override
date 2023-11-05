@@ -1,0 +1,12 @@
+{
+  "name": "@wcd/waldronmatt.litts-kwzd4iel",
+  "version": "0.0.0",
+  "description": "",
+  "license": "ISC",
+  "type": "module",
+  "homepage": "{{ homepage }}",
+  "scripts": {
+    "serve": "npx wcd-cli@latest serve XlfSrBJgu8hrptGm02hE --open"
+  },
+  "dependencies": {}
+}
