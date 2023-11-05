@@ -20,9 +20,10 @@ export const addStyleSheetToElements = (
     return;
   }
 
-  elements.forEach((element) => {
+  elements.forEach((element: Element) => {
     if (element) {
       const name = element.nodeName.toLowerCase();
+      // check if the element is a web component
       if (name && name.includes("-")) {
         // https://developers.google.com/web/fundamentals/web-components/customelements#progressively_enhanced_html
         customElements
@@ -37,6 +38,7 @@ export const addStyleSheetToElements = (
             } else {
               // this fallback behavior aligns with the web component API spec
               const styleEl = document.createElement("style");
+              // style.cssText is fragile because this relies on Lit's interal style API
               styleEl.textContent = style.cssText;
               // eslint-disable-next-line @typescript-eslint/no-explicit-any
               (element as any).renderRoot.appendChild(styleEl);

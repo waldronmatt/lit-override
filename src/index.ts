@@ -39,8 +39,8 @@ export class Promo extends LitElement {
 
   private renderMarkupOverride(): TemplateResult {
     return html`
-      <slot name="heading">This is a heading!</slot>
-      <slot name="content">Here is a parapgraph below the heading.</slot>
+      <slot name="heading"></slot>
+      <slot name="content"></slot>
     `;
   }
 
@@ -66,11 +66,14 @@ export class Promo extends LitElement {
           }}
         >
           <h3 slot="heading">This is a heading!</h3>
-          <p slot="content">Here is a parapgraph below the heading.</p>
+          <p slot="content">Here is a paragraph below the heading.</p>
         </w-box>
       </section>
       <section>
-        <h2>We can generate a customized box component from an endpoint!</h2>
+        <h2>
+          We can generate a customized box component dynamically from an API
+          endpoint!
+        </h2>
         ${until(
           this.list.then((data) => {
             return html`${repeat(
