@@ -6,46 +6,55 @@ Check out this [live demo](https://studio.webcomponents.dev/view/XlfSrBJgu8hrptG
 
 ## Usage
 
-`my-app.ts`
+`app.ts`
 
 ```ts
+import { html, css, TemplateResult, CSSResult, LitElement } from "lit";
+import { customElement } from "lit/decorators.js";
 import { addStyleSheetToElements } from "./stylesheet-interface.js";
 import { addMarkupToElements } from "./markup-interface.js";
 import "./box.js";
 
-private applyStyleOverride: CSSResult = css`
-  :host {
-    display: block;
-    border: 2px solid #000000;
-    margin-top: 1rem;
-  }
+@customElement("app")
+export class App extends LitElement {
+  private applyStyleOverride: CSSResult = css`
+    :host {
+      display: block;
+      border: 2px solid #000000;
+      margin-top: 1rem;
+    }
 
-  ::slotted([slot="heading"]) {
-    color: #0000ff;
-  }
+    ::slotted([slot="heading"]) {
+      color: #0000ff;
+    }
 
-  ::slotted([slot="content"]) {
-    color: #ff0000;
-  }
-`;
-
-private renderMarkupOverride(): TemplateResult {
-  return html`
-    <slot name="heading"></slot>
-    <slot name="content"></slot>
+    ::slotted([slot="content"]) {
+      color: #ff0000;
+    }
   `;
-};
 
-<w-box
-    ?listenForConnectedCallback=${true}
-    @connected-callback=${(event: { target: HTMLElement }) => {
-      addStyleSheetToElements([event.target], applyStyleOverride);
-      addMarkupToElements([event.target], renderMarkupOverride());
-    })
->
-  <h3 slot="heading">This is a heading!</h3>
-  <p slot="content">Here is a paragraph below the heading.</p>
-</w-box>
+  private renderMarkupOverride(): TemplateResult {
+    return html`
+      <slot name="heading"></slot>
+      <slot name="content"></slot>
+    `;
+  }
+
+  render(): TemplateResult {
+    return html`
+      <w-box
+        ?listenForConnectedCallback=${true}
+        @connected-callback=${(event: { target: HTMLElement }) => {
+          addStyleSheetToElements([event.target], this.applyStyleOverride);
+          addMarkupToElements([event.target], this.renderMarkupOverride());
+        }}
+      >
+        <h3 slot="heading">This is a heading!</h3>
+        <p slot="content">Here is a paragraph below the heading.</p>
+      </w-box>
+    `;
+  }
+}
 ```
 
 ## Features
