@@ -2,7 +2,7 @@
   "name": "@wcd/waldronmatt.litts-kwzd4iel",
   "version": "0.0.0",
   "description": "",
-  "license": "ISC",
+  "license": "MIT",
   "type": "module",
   "homepage": "{{ homepage }}",
   "scripts": {
