@@ -24,7 +24,7 @@ import { emit } from "./event";
  * };
  *
  * <w-box
- *    ?listenForConnectedCallback=${true}
+ *    ?emitConnectedCallback=${true}
  *    @connected-callback=${(event: { target: HTMLElement }) => {
  *      addStyleSheetToElements([event.target], applyStyleOverride);
  *      addMarkupToElements([event.target], renderMarkupOverride());
@@ -45,17 +45,17 @@ export class Box extends LitElement {
       height: 100vh;
       opacity: 0;
       // transition duration is high to visualize
-      transition: opacity 2s ease-in-out;
+      transition: opacity 0.3s ease-in-out;
     }
   `;
 
-  @property()
-  listenForConnectedCallback = false;
+  @property({ reflect: true, type: Boolean })
+  emitConnectedCallback = false;
 
   connectedCallback() {
     super.connectedCallback();
 
-    if (this.listenForConnectedCallback) {
+    if (this.emitConnectedCallback) {
       emit(this, "connected-callback");
     }
   }

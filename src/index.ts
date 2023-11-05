@@ -59,7 +59,7 @@ export class Promo extends LitElement {
       <section>
         <h2>A box component with customized markup and styles!</h2>
         <w-box
-          ?listenForConnectedCallback=${true}
+          ?emitConnectedCallback=${true}
           @connected-callback=${(event: { target: LitElement }) => {
             addStyleSheetToElements([event.target], this.applyStyleOverride);
             addMarkupToElements([event.target], this.renderMarkupOverride());
@@ -78,7 +78,7 @@ export class Promo extends LitElement {
               (item: any) => item.id,
               (item) => html`
                 <w-box
-                  ?listenForConnectedCallback=${true}
+                  ?emitConnectedCallback=${true}
                   @connected-callback=${(event: { target: LitElement }) => {
                     addStyleSheetToElements(
                       [event.target],
