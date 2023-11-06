@@ -43,7 +43,7 @@ export class App extends LitElement {
   render(): TemplateResult {
     return html`
       <w-box
-        ?listenForConnectedCallback=${true}
+        ?emitConnectedCallback=${true}
         @connected-callback=${(event: { target: HTMLElement }) => {
           addStyleSheetToElements([event.target], this.applyStyleOverride);
           addMarkupToElements([event.target], this.renderMarkupOverride());
@@ -73,11 +73,11 @@ When building out a design library, I came across situations where I needed a pa
 
 Ideally, a design system will atomize everything perfectly to create composable components, but oftentimes, requirements can deviate from an optimal solution. Updating existing components to support new variants would be preferred, but what if we have situations where component variants differ in markup and styles significantly?
 
-One option would be to break this out into a separate component, but this can create unwieldy code if styles and markup differ across many components/apps. Creating new components grouped together with one centralized component creates additional overhead and boilerplate. Another option would be to use regular html and css, but I still wanted to leverage the encapsulation benefits of web components.
+One option would be to break this out into a separate component, but this can create unwieldy code if styles and markup differ across many components/apps. Creating new components grouped together with one centralized component per use-case creates additional overhead and boilerplate. Another option would be to use regular html and css, but I still wanted to leverage the encapsulation benefits of web components.
 
 ## How it Works
 
-In order for overriding to work, the parent component needs a reliable way to know when `connectedCallback` has fired for the child components. This has been a pressing topic in the web component community as seen in [this thread](https://github.com/WICG/webcomponents/issues/619). Luckily there is an easy workaround.
+In order for overriding to work, the parent component needs a reliable way to know when `connectedCallback` has fired for child components. This has been a pressing topic in the web component community as seen in [this thread](https://github.com/WICG/webcomponents/issues/619). Luckily there is an easy workaround.
 
 In the child component's `connectedCallback`, emit an event so the parent component can listen and act on it. This helps prevent race conditions where the parent's `connectedCallback` fires before children `connectedCallback`.
 
@@ -87,7 +87,7 @@ For situations where components are lazy-loaded, the solution above won't be eno
 
 ## Limitations
 
-- This project assumes you are overriding styles and markup on initial load only via `connectedCallback`. Additional work would need to be done to support overriding if state changes (for example, if you decide to inject styles and markup at a later point in the component's/app's lifecycle or after an action).
+- This project assumes you are overriding styles and markup on initial load via `connectedCallback`. Additional work would need to be done to support overriding if state changes (for example, if you decide to inject styles and markup at a later point in the component's/app's lifecycle or after an action).
 
 - As described in more detail below, this project relies on Lit for overriding. For a native web component implementation, check out [this article](https://css-tricks.com/encapsulating-style-and-structure-with-shadow-dom/#aa-the-best-of-both-worlds) and associated [codepen](https://codepen.io/calebdwilliams/pen/rROadR).
 
