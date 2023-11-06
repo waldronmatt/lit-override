@@ -6,4 +6,4 @@ export default {
   },
 };
 
-export const story1 = () => '<w-promo></w-promo>';
+export const story1 = () => "<w-promo></w-promo>";

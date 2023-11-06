@@ -14,12 +14,9 @@ export class Promo extends LitElement {
     }
   `;
 
-  @queryAll("my-button")
-  _myButtons: Array<HTMLElement>;
-
-  private list = fetch("https://jsonplaceholder.typicode.com/users").then(
-    (response) => response.json()
-  );
+  private list = fetch("https://jsonplaceholder.typicode.com/users")
+    .then((response) => response.json())
+    .catch((error) => console.error(error));
 
   private applyStyleOverride: CSSResult = css`
     :host {

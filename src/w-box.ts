@@ -6,8 +6,7 @@ import { emit } from "./event";
 /**
  * @element cipublic-box
  *
- * A generic component that can accept different markup
- * and styles
+ * A generic component that can accept different styles and markup
  */
 @customElement("w-box")
 export class Box extends LitElement {

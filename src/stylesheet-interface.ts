@@ -2,10 +2,9 @@ import { CSSResult } from "lit";
 import { supportsAdoptingStyleSheets } from "@lit/reactive-element";
 
 /**
- * Applies the given styles to a `shadowRoot` when `adoptedStyleSheets` is available in the browser.
+ * Applies the given style using `adoptedStyleSheets`.
  *
- * Appends the given styles to the `shadowRoot` of the `childElements` for when
- * `adoptedStyleSheets` is not available in the browser.
+ * **Note**: Appends the style to the `shadowroot` of elements for browser fallback.
  *
  * @param elements iterable of elements to apply styles to
  * @param style CSSResult
@@ -35,18 +34,14 @@ export const addStyleSheetToElements = (
           .whenDefined(name)
           .then(() => {
             if (supportsAdoptingStyleSheets) {
-              // eslint-disable-next-line @typescript-eslint/no-explicit-any
               (element as any).renderRoot.adoptedStyleSheets = [
                 ...(element as any).renderRoot.adoptedStyleSheets,
                 style.styleSheet,
               ];
             } else {
-              // this fallback behavior aligns with the web component API spec
               const styleEl = document.createElement("style");
-              // style.cssText is fragile because this relies on Lit's interal style API
-              // see https://github.com/lit/lit/blob/e0c6e2c928ea5e50fae2b75f8c56ef4f2f47ad84/packages/reactive-element/src/css-tag.ts#L106-L130
+              // style.cssText is fragile because this relies on Lit's interal API
               styleEl.textContent = style.cssText;
-              // eslint-disable-next-line @typescript-eslint/no-explicit-any
               (element as any).renderRoot.appendChild(styleEl);
             }
           })

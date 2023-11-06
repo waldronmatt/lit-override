@@ -1,9 +1,10 @@
 import { TemplateResult } from "lit";
 
 /**
- * Applies the given template to the elements' `shadowRoot`.
+ * Applies the given template to the `shadowRoot` of elements.
  *
- * **Note**: Custom elements provided must be configured to accept templates.
+ * **Note**: Custom elements provided must be configured to accept templates via a
+ * `_template` state decorator and the `templateContent` directive: `templateContent(this._template)`
  *
  * @param elements iterable of elements to apply styles to
  * @param template TemplateResult
@@ -39,7 +40,7 @@ export const addMarkupToElements = (
               return;
             } else {
               const templateElement = document.createElement("template");
-              // template.strings[0] is fragile because this relies on Lit's interal template API
+              // template.strings[0] is fragile because this relies on Lit's interal API
               templateElement.innerHTML = template.strings[0];
               // assign the template override to the w-box `_template` prop
               (element as any)._template = templateElement;
