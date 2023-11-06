@@ -12,7 +12,7 @@ export const addMarkupToElements = (
   elements: NodeListOf<Element> | Array<Element>,
   template: TemplateResult
 ): void => {
-  if (!elements.length) {
+  if (!elements || !elements.length || !template) {
     return;
   }
 

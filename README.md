@@ -59,23 +59,25 @@ export class App extends LitElement {
 
 ## Features
 
-Maintain web component encapsulation while providing added flexibility to customize/override styles and markup without needing to create or modify components.
+Maintain web component encapsulation while providing added flexibility to customize/override styles and markup without needing to create or modify components directly.
 
 - Override styles: Supports css child selectors and flexible overriding (improvement over `:part` and css variables)
 - Override markup: Supports generic and named slots
 - No race conditions: Apply overrides to child components/apps reliably
-- Lazy-loading support: Supports dynamically applying overrides to lazy-loaded components
-- Leverage one base component to create infinite combinations: No need to modify existing components or create new ones
+- Lazy-loading support: Overriding with dynamically loaded/lazy-loaded components will work
+- Leverage one base component and create infinite combinations: No need to modify existing components directly or create new ones. Overriding occurs in the host/parent component/app.
 
 ## Background
 
 When building out a design library, I came across situations where I needed a parent component/app to override child component styles and markup. Use cases included rendering different combinations of `p` tags, `div` tags, images, and other basic elements.
 
-Ideally, a design system will atomize everything perfectly to create composable components, but oftentimes, requirements can deviate from an optimal solution. Updating existing components to support new variants would be preferred, but what if we have situations where component variants differ in markup and styles significantly?
+Ideally, a design system will atomize everything perfectly to create composable components, but oftentimes, requirements can deviate from an optimal solution. Updating existing components to support new variants would be preferred, but what if we have situations where component variants differ in styles and markup significantly?
 
-One option would be to break this out into a separate component, but this can create unwieldy code if styles and markup differ across many components/apps. Creating new components grouped together with one centralized component per use-case creates additional overhead and boilerplate. Another option would be to use regular html and css, but I still wanted to leverage the encapsulation benefits of web components.
+One option would be to break this out into a separate component, but this can create unwieldy code if styles and markup differ across many components/apps. Creating new components grouped together with one centralized component/app per use-case creates additional overhead and boilerplate. Another option would be to use regular html and css, but I still wanted to leverage the encapsulation benefits of web components.
 
 ## How it Works
+
+The two utilities, `stylesheet-interface.ts` and `markup-interface.ts`, under the hood leverage Lit's internals to inject styles and markup.
 
 In order for overriding to work, the parent component needs a reliable way to know when `connectedCallback` has fired for child components. This has been a pressing topic in the web component community as seen in [this thread](https://github.com/WICG/webcomponents/issues/619). Luckily there is an easy workaround.
 
@@ -108,3 +110,7 @@ For situations where components are lazy-loaded, the solution above won't be eno
 Before using these utilities for your own use, please note that they are experimental. For production sites, please use at your own risk.
 
 Please also note that you should first try to align with teams on a design system that promotes component composability to avoid overriding in the first place.
+
+## Future Work
+
+I'm always open to new ideas and improvements. PRs welcome!

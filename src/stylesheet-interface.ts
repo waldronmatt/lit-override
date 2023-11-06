@@ -9,14 +9,12 @@ import { supportsAdoptingStyleSheets } from "@lit/reactive-element";
  *
  * @param elements iterable of elements to apply styles to
  * @param style CSSResult
- *
- * [Reference](https://github.com/lit/lit/blob/e0c6e2c928ea5e50fae2b75f8c56ef4f2f47ad84/packages/reactive-element/src/css-tag.ts#L106-L130)
  */
 export const addStyleSheetToElements = (
   elements: NodeListOf<Element> | Array<Element>,
   style: CSSResult
 ): void => {
-  if (!elements || !elements.length) {
+  if (!elements || !elements.length || !style) {
     return;
   }
 
@@ -46,6 +44,7 @@ export const addStyleSheetToElements = (
               // this fallback behavior aligns with the web component API spec
               const styleEl = document.createElement("style");
               // style.cssText is fragile because this relies on Lit's interal style API
+              // see https://github.com/lit/lit/blob/e0c6e2c928ea5e50fae2b75f8c56ef4f2f47ad84/packages/reactive-element/src/css-tag.ts#L106-L130
               styleEl.textContent = style.cssText;
               // eslint-disable-next-line @typescript-eslint/no-explicit-any
               (element as any).renderRoot.appendChild(styleEl);
