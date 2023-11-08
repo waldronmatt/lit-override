@@ -243,7 +243,7 @@ In situations where we slot in a component with custom markup and styles from th
 
 - This project assumes you are overriding styles and markup on initial load via `connectedCallback`. Additional work would need to be done to support overriding if state changes (for example, if you decide to inject styles and markup at a later point in the component's/app's lifecycle or after an action).
 
-Another possible approach to this could be to leverage [Lit Context](https://lit.dev/docs/data/context/) to make available the point in which the component is ready to accept custom markup and styles.
+- Another possible approach to this could be to leverage [Lit Context](https://lit.dev/docs/data/context/) to make available the point in which the component is ready to accept custom markup and styles.
 
 - As described in more detail below, this project uses Lit for overriding. For a native web component implementation, check out [this article](https://css-tricks.com/encapsulating-style-and-structure-with-shadow-dom/#aa-the-best-of-both-worlds) and associated [codepen](https://codepen.io/calebdwilliams/pen/rROadR).
 
