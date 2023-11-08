@@ -26,32 +26,32 @@ export const addStyleSheetToElements = (
 
   elements.forEach((element: Element) => {
     if (element) {
-      const name = element.nodeName.toLowerCase();
-      // check if the element is a web component
-      if (name && name.includes("-")) {
-        // https://developers.google.com/web/fundamentals/web-components/customelements#progressively_enhanced_html
-        customElements
-          .whenDefined(name)
-          .then(() => {
-            if (supportsAdoptingStyleSheets) {
-              (element as any).renderRoot.adoptedStyleSheets = [
-                ...(element as any).renderRoot.adoptedStyleSheets,
-                style.styleSheet,
-              ];
-            } else {
-              const styleEl = document.createElement("style");
-              // style.cssText is fragile because this relies on Lit's interal API
-              styleEl.textContent = style.cssText;
-              (element as any).renderRoot.appendChild(styleEl);
-            }
-          })
-          .catch((error) => {
-            console.error(
-              `There was an error with component registration: ${error}`
-            );
-            return;
-          });
+      const name = element.tagName.toLowerCase();
+      if (!customElements.get(name)) {
+        console.error(`Element ${name} is not a valid web component`);
+        return;
       }
+      customElements
+        .whenDefined(name)
+        .then(() => {
+          if (supportsAdoptingStyleSheets) {
+            (element as any).renderRoot.adoptedStyleSheets = [
+              ...(element as any).renderRoot.adoptedStyleSheets,
+              style.styleSheet,
+            ];
+          } else {
+            const styleEl = document.createElement("style");
+            // style.cssText is fragile because this relies on Lit's interal API
+            styleEl.textContent = style.cssText;
+            (element as any).renderRoot.appendChild(styleEl);
+          }
+        })
+        .catch((error) => {
+          console.error(
+            `There was an error with component registration: ${error}`
+          );
+          return;
+        });
     }
   });
 };

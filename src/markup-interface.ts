@@ -26,33 +26,26 @@ export const addMarkupToElements = (
 
   elements.forEach((element: Element) => {
     if (element) {
-      const name = element.nodeName.toLowerCase();
-      // check if the element is a web component
-      if (name && name.includes("-")) {
-        // https://developers.google.com/web/fundamentals/web-components/customelements#progressively_enhanced_html
-        customElements
-          .whenDefined(name)
-          .then(() => {
-            if (!("_template" in element)) {
-              console.error(
-                `Property '_template' does not existing on element ${name}. Please add it.`
-              );
-              return;
-            } else {
-              const templateElement = document.createElement("template");
-              // template.strings[0] is fragile because this relies on Lit's interal API
-              templateElement.innerHTML = template.strings[0];
-              // assign the template override to the w-box `_template` prop
-              (element as any)._template = templateElement;
-            }
-          })
-          .catch((error) => {
-            console.error(
-              `There was an error with component registration: ${error}`
-            );
-            return;
-          });
+      const name = element.tagName.toLowerCase();
+      if (!customElements.get(name)) {
+        console.error(`Element ${name} is not a valid web component`);
+        return;
       }
+      customElements
+        .whenDefined(name)
+        .then(() => {
+          const templateElement = document.createElement("template");
+          // template.strings[0] is fragile because this relies on Lit's interal API
+          templateElement.innerHTML = template.strings[0];
+          const content = document.importNode(templateElement.content, true);
+          (element as any).renderRoot.appendChild(content);
+        })
+        .catch((error) => {
+          console.error(
+            `There was an error with component registration: ${error}`
+          );
+          return;
+        });
     }
   });
 };

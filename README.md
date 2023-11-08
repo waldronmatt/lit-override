@@ -6,6 +6,24 @@ Check out this [live demo](https://studio.webcomponents.dev/view/XlfSrBJgu8hrptG
 
 ## Usage
 
+### Custom Markup and Styles Applied by Host App
+
+`index.html`
+
+```html
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <script src="./dist/index.js" type="module"></script>
+  </head>
+
+  <body>
+    <w-promo></w-promo>
+  </body>
+</html>
+```
+
 `app.ts`
 
 ```ts
@@ -43,7 +61,7 @@ export class App extends LitElement {
   render(): TemplateResult {
     return html`
       <w-box
-        ?emitConnectedCallback=${true}
+        emitConnectedCallback
         @connected-callback=${(event: { target: HTMLElement }) => {
           addStyleSheetToElements([event.target], this.applyStyleOverride);
           addMarkupToElements([event.target], this.renderMarkupOverride());
@@ -57,15 +75,137 @@ export class App extends LitElement {
 }
 ```
 
+### Custom Markup and Styles Slotted from Light DOM
+
+`index.html`
+
+```html
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <script src="./dist/index.js" type="module"></script>
+  </head>
+
+  <body>
+    <w-box>
+      <h3 slot="heading">A heading from a template in the light dom</h3>
+      <p slot="content">A paragraph from a template in the light dom.</p>
+      <template>
+        <slot name="heading"></slot>
+        <slot name="content"></slot>
+        <style>
+          :host {
+            display: block;
+            background-color: #000000;
+            margin-top: 1rem;
+          }
+
+          ::slotted([slot="heading"]) {
+            color: #800080;
+          }
+
+          ::slotted([slot="content"]) {
+            color: #ffd700;
+          }
+        </style>
+      </template>
+    </w-box>
+  </body>
+</html>
+```
+
+`app.ts`
+
+```ts
+import { html, TemplateResult, LitElement } from "lit";
+import { customElement } from "lit/decorators.js";
+
+@customElement("app")
+export class App extends LitElement {
+  render(): TemplateResult {
+    return html` <slot></slot> `;
+  }
+}
+```
+
+### Hybrid Approach - Custom Markup Slotted from Light DOM and Styles Applied by Host App
+
+`index.html`
+
+```html
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <script src="./dist/index.js" type="module"></script>
+  </head>
+
+  <body>
+    <w-box>
+      <h3 slot="heading">A heading from a template in the light dom</h3>
+      <p slot="content">A paragraph from a template in the light dom.</p>
+      <template>
+        <slot name="heading"></slot>
+        <slot name="content"></slot>
+      </template>
+    </w-box>
+  </body>
+</html>
+```
+
+`app.ts`
+
+```ts
+import { html, css, TemplateResult, CSSResult, LitElement } from "lit";
+import { customElement } from "lit/decorators.js";
+import { addStyleSheetToElements } from "./stylesheet-interface.js";
+import "./w-box.js";
+
+@customElement("app")
+export class App extends LitElement {
+  private applyStyleOverride: CSSResult = css`
+    :host {
+      display: block;
+      border: 2px solid #000000;
+      margin-top: 1rem;
+    }
+
+    ::slotted([slot="heading"]) {
+      color: #0000ff;
+    }
+
+    ::slotted([slot="content"]) {
+      color: #ff0000;
+    }
+  `;
+
+  render(): TemplateResult {
+    return html`
+      <slot
+        @slotchange=${(event: { target: HTMLSlotElement }) => {
+          addStyleSheetToElements(
+            event.target.assignedElements(),
+            this.applyStyleOverride
+          );
+        }}
+      >
+      </slot>
+    `;
+  }
+}
+```
+
 ## Features
 
 Maintain web component encapsulation while providing added flexibility to customize/override styles and markup without needing to create or modify components directly.
 
 - Override styles: Supports css child selectors and flexible overriding (improvement over `:part` and css variables)
 - Override markup: Supports generic and named slots
+- Override flexibility: Override styles from host component/app or slot them from the light DOM (closer to a native web component approach)
 - No race conditions: Apply overrides to child components/apps reliably
 - Lazy-loading support: Overriding with dynamically loaded/lazy-loaded components will work
-- Leverage one base component and create infinite combinations: No need to modify existing components directly or create new ones. Overriding occurs in the host/parent component/app.
+- Leverage one base component and create infinite combinations: No need to modify existing components directly or create new ones.
 
 ## Background
 
@@ -77,7 +217,17 @@ One option would be to break this out into a separate component, but this can cr
 
 ## How it Works
 
+### Lit Component and Utilities
+
 The two utilities, `stylesheet-interface.ts` and `markup-interface.ts`, under the hood leverage Lit's internals to inject styles and markup.
+
+The `stylesheet-interface.ts` utility will use the `adoptedStylesheets` API to append styles and fall back to appending a `<style>` tag injected with the styles to the element root if browsers do not support the API. This behavior matches the Lit library.
+
+The `markup-interface.ts` utility will create a `<template>` tag injected with the markup to the element root. It is up to the component (`x-box`) to support `template` detection and rendering it using Lit's `template` directive.
+
+The `x-box` component will grab the `template` element if it exists; whether that is set in the light DOM by declaring the `<template></template>` element or programmatically via the `markup-interface.ts` utility.
+
+### The whenDefined Promise and connectedCallback/slotchange Events
 
 In order for overriding to work, the parent component needs a reliable way to know when `connectedCallback` has fired for child components. This has been a pressing topic in the web component community as seen in [this thread](https://github.com/WICG/webcomponents/issues/619). Luckily there is an easy workaround.
 
@@ -87,17 +237,21 @@ To avoid too much noise from `connectedCallback` events being emitted, this feat
 
 For situations where components are lazy-loaded, the solution above won't be enough. In `stylesheet-interface.ts` and `markup-interface.ts`, we use `whenDefined` to inject custom styles and markup only when elements become registered.
 
+In situations where we slot in a component with custom markup and styles from the light DOM using the `template` element, the native `slotchange` event will guarantee us access to the child component being slotted in. We can avoid race conditions and also do away with the `emitConnectedCallback` event in this situation.
+
 ## Limitations
 
 - This project assumes you are overriding styles and markup on initial load via `connectedCallback`. Additional work would need to be done to support overriding if state changes (for example, if you decide to inject styles and markup at a later point in the component's/app's lifecycle or after an action).
 
-- As described in more detail below, this project relies on Lit for overriding. For a native web component implementation, check out [this article](https://css-tricks.com/encapsulating-style-and-structure-with-shadow-dom/#aa-the-best-of-both-worlds) and associated [codepen](https://codepen.io/calebdwilliams/pen/rROadR).
+Another possible approach to this could be to leverage [Lit Context](https://lit.dev/docs/data/context/) to make available the point in which the component is ready to accept custom markup and styles.
+
+- As described in more detail below, this project uses Lit for overriding. For a native web component implementation, check out [this article](https://css-tricks.com/encapsulating-style-and-structure-with-shadow-dom/#aa-the-best-of-both-worlds) and associated [codepen](https://codepen.io/calebdwilliams/pen/rROadR).
 
 `markup-interface.ts`
 
 - Props fed into your custom markup will not work. Only static markdown is supported.
 - This utility is fragile because it relies on Lit's internal `template` to set the markup overrides.
-- Custom elements such as `w-box` must be configured to accept templates for this utility to work.
+- Custom elements such as `w-box` must be configured to detect template elements for this utility to work.
 
 `stylesheet-interface.ts`
 

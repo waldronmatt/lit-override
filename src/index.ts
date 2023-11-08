@@ -41,10 +41,10 @@ export class Promo extends LitElement {
     `;
   }
 
-  render(): TemplateResult {
+  protected render(): TemplateResult {
     return html`
+      <h2>A default box component</h2>
       <section>
-        <h2>Default box component</h2>
         <w-box>
           <ul>
             <li>Renders a generic slot</li>
@@ -53,10 +53,11 @@ export class Promo extends LitElement {
           </ul>
         </w-box>
       </section>
+      <h2>A box component with customized markup and styles</h2>
       <section>
-        <h2>A box component with customized markup and styles!</h2>
+        <h3>Customization applied by the host app!</h3>
         <w-box
-          ?emitConnectedCallback=${true}
+          emitConnectedCallback
           @connected-callback=${(event: { target: LitElement }) => {
             addStyleSheetToElements([event.target], this.applyStyleOverride);
             addMarkupToElements([event.target], this.renderMarkupOverride());
@@ -66,11 +67,37 @@ export class Promo extends LitElement {
           <p slot="content">Here is a paragraph below the heading.</p>
         </w-box>
       </section>
+      </section>
+        <h3>Customization slotted from the light dom!</h3>
+        <slot></slot>
+      </section>
       <section>
-        <h2>
-          We can generate a customized box component dynamically from an API
-          endpoint!
-        </h2>
+      <h3>Markup slotted from the light dom and styles applied by the host app!</h3>
+        <slot
+          name="test-markup"
+          @slotchange=${(event: { target: HTMLSlotElement }) => {
+            addStyleSheetToElements(
+              event.target.assignedElements(),
+              this.applyStyleOverride
+            );
+          }}
+        >
+        </slot>
+      </section>
+      <section>
+      <h3>Markup applied by the host app and styles slotted from the light dom!</h3>
+        <slot name="test-styles"
+          @slotchange=${(event: { target: HTMLSlotElement }) => {
+            addMarkupToElements(
+              event.target.assignedElements(),
+              this.renderMarkupOverride()
+            );
+          }}
+        >
+        </slot>
+      </section>
+      <section>
+        <h3>Box components with custom markup and styles generated dynamically from an API endpoint!</h3>
         ${until(
           this.list.then((data) => {
             return html`${repeat(
@@ -78,7 +105,7 @@ export class Promo extends LitElement {
               (item: any) => item.id,
               (item) => html`
                 <w-box
-                  ?emitConnectedCallback=${true}
+                  emitConnectedCallback
                   @connected-callback=${(event: { target: LitElement }) => {
                     addStyleSheetToElements(
                       [event.target],
