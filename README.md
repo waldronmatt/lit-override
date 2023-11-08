@@ -103,7 +103,7 @@ export class App extends LitElement {
             }
 
             ::slotted([slot="heading"]) {
-              color: #800080;
+              color: #ffffff;
             }
 
             ::slotted([slot="content"]) {
@@ -226,9 +226,9 @@ The two utilities, `stylesheet-interface.ts` and `markup-interface.ts`, under th
 
 The `stylesheet-interface.ts` utility will use the `adoptedStylesheets` API to append styles and fall back to appending a `<style>` tag injected with the styles to the element root if browsers do not support the API. This behavior matches the Lit library.
 
-The `markup-interface.ts` utility will create a `<template>` tag injected with the markup to the element root. It is up to the component (`x-box`) to support `template` detection and rendering it using Lit's `template` directive.
+The `markup-interface.ts` utility will create a `<template>` tag injected with the markup to the element root. It is up to the component (`w-box`) to support `template` detection and rendering it using Lit's `template` directive.
 
-The `x-box` component will grab the `template` element if it exists; whether that is set in the light DOM by declaring the `<template></template>` element or programmatically via the `markup-interface.ts` utility.
+The `w-box` component will grab the `template` element if it exists; whether that is set in the light DOM by declaring the `<template></template>` element or programmatically via the `markup-interface.ts` utility.
 
 ### The whenDefined Promise and connectedCallback/slotchange Events
 
