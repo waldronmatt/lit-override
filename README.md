@@ -88,29 +88,31 @@ export class App extends LitElement {
   </head>
 
   <body>
-    <w-box>
-      <h3 slot="heading">A heading from a template in the light dom</h3>
-      <p slot="content">A paragraph from a template in the light dom.</p>
-      <template>
-        <slot name="heading"></slot>
-        <slot name="content"></slot>
-        <style>
-          :host {
-            display: block;
-            background-color: #000000;
-            margin-top: 1rem;
-          }
+    <w-promo>
+      <w-box>
+        <h3 slot="heading">A heading from a template in the light dom</h3>
+        <p slot="content">A paragraph from a template in the light dom.</p>
+        <template>
+          <slot name="heading"></slot>
+          <slot name="content"></slot>
+          <style>
+            :host {
+              display: block;
+              background-color: #000000;
+              margin-top: 1rem;
+            }
 
-          ::slotted([slot="heading"]) {
-            color: #800080;
-          }
+            ::slotted([slot="heading"]) {
+              color: #800080;
+            }
 
-          ::slotted([slot="content"]) {
-            color: #ffd700;
-          }
-        </style>
-      </template>
-    </w-box>
+            ::slotted([slot="content"]) {
+              color: #ffd700;
+            }
+          </style>
+        </template>
+      </w-box>
+    </w-promo>
   </body>
 </html>
 ```
@@ -142,14 +144,16 @@ export class App extends LitElement {
   </head>
 
   <body>
-    <w-box>
-      <h3 slot="heading">A heading from a template in the light dom</h3>
-      <p slot="content">A paragraph from a template in the light dom.</p>
-      <template>
-        <slot name="heading"></slot>
-        <slot name="content"></slot>
-      </template>
-    </w-box>
+    <w-promo>
+      <w-box>
+        <h3 slot="heading">A heading from a template in the light dom</h3>
+        <p slot="content">A paragraph from a template in the light dom.</p>
+        <template>
+          <slot name="heading"></slot>
+          <slot name="content"></slot>
+        </template>
+      </w-box>
+    </w-promo>
   </body>
 </html>
 ```
