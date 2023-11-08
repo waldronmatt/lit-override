@@ -160,7 +160,6 @@ export class App extends LitElement {
 import { html, css, TemplateResult, CSSResult, LitElement } from "lit";
 import { customElement } from "lit/decorators.js";
 import { addStyleSheetToElements } from "./stylesheet-interface.js";
-import "./w-box.js";
 
 @customElement("app")
 export class App extends LitElement {
