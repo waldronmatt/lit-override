@@ -6,7 +6,11 @@ import { emit } from "./event";
 /**
  * @element cipublic-box
  *
- * A generic component that can accept different styles and markup
+ * A generic component that can accept different styles and markup.
+ *
+ * **Note**: Set `emitConnectedCallback` property and use `connected-callback` event
+ * to reliably apply styles and markup when including inside another Lit component.
+ * Alternatively, use the native `slotchange` event when slotting this component.
  */
 @customElement("w-box")
 export class Box extends LitElement {

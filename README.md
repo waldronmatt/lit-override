@@ -6,7 +6,7 @@ Check out this [live demo](https://studio.webcomponents.dev/view/XlfSrBJgu8hrptG
 
 ## Usage
 
-### Custom Markup and Styles Applied by Host App
+### Custom Styles and Markup Applied by Host App
 
 `index.html`
 
@@ -75,7 +75,7 @@ export class App extends LitElement {
 }
 ```
 
-### Custom Markup and Styles Slotted from Light DOM
+### Custom Styles and Markup Slotted from Light DOM
 
 `index.html`
 
@@ -240,13 +240,13 @@ To avoid too much noise from `connectedCallback` events being emitted, this feat
 
 For situations where components are lazy-loaded, the solution above won't be enough. In `stylesheet-interface.ts` and `markup-interface.ts`, we use `whenDefined` to inject custom styles and markup only when elements become registered.
 
-In situations where we slot in a component with custom markup and styles from the light DOM using the `template` element, the native `slotchange` event will guarantee us access to the child component being slotted in. We can avoid race conditions and also do away with the `emitConnectedCallback` event in this situation.
+In situations where we slot in a component with custom styles and markup from the light DOM using the `template` element, the native `slotchange` event will guarantee us access to the child component being slotted in. We can avoid race conditions and also do away with the `emitConnectedCallback` event in this situation.
 
 ## Limitations
 
 - This project assumes you are overriding styles and markup on initial load via `connectedCallback`. Additional work would need to be done to support overriding if state changes (for example, if you decide to inject styles and markup at a later point in the component's/app's lifecycle or after an action).
 
-- Another possible approach to this could be to leverage [Lit Context](https://lit.dev/docs/data/context/) to make available the point in which the component is ready to accept custom markup and styles.
+- Another possible approach to this could be to leverage [Lit Context](https://lit.dev/docs/data/context/) to make available the point in which the component is ready to accept custom styles and markup.
 
 - As described in more detail below, this project uses Lit for overriding. For a native web component implementation, check out [this article](https://css-tricks.com/encapsulating-style-and-structure-with-shadow-dom/#aa-the-best-of-both-worlds) and associated [codepen](https://codepen.io/calebdwilliams/pen/rROadR).
 
