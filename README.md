@@ -205,10 +205,10 @@ Maintain web component encapsulation while providing added flexibility to custom
 
 - Override styles: Supports css child selectors and flexible overriding (improvement over `:part` and css variables)
 - Override markup: Supports generic and named slots
-- Override flexibility: Override styles from host component/app or slot them from the light DOM (closer to a native web component approach)
+- Flexibility: Override styles from host component/app or slot them from the light DOM (closer to a native web component approach)
 - No race conditions: Apply overrides to child components/apps reliably
-- Lazy-loading support: Overriding with dynamically loaded/lazy-loaded components will work
-- Leverage one base component and create infinite combinations: No need to modify existing components directly or create new ones.
+- Lazy-loading: Support for overriding on dynamically loaded/lazy-loaded components
+- Leverage one base component and create infinite combinations: No need to modify existing components directly or create new ones
 
 ## Background
 
@@ -222,7 +222,7 @@ One option would be to break this out into a separate component, but this can cr
 
 ### Lit Component and Utilities
 
-The two utilities, `stylesheet-interface.ts` and `markup-interface.ts`, under the hood leverage Lit's internals to inject styles and markup.
+The two utilities, `stylesheet-interface.ts` and `markup-interface.ts`, leverage Lit's internals to inject styles and markup.
 
 The `stylesheet-interface.ts` utility will use the `adoptedStylesheets` API to append styles and fall back to appending a `<style>` tag injected with the styles to the element root if browsers do not support the API. This behavior matches the Lit library.
 

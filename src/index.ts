@@ -67,12 +67,14 @@ export class Promo extends LitElement {
           <p slot="content">Here is a paragraph below the heading.</p>
         </w-box>
       </section>
-      </section>
+      <section>
         <h3>Customization slotted from the light dom!</h3>
         <slot></slot>
       </section>
       <section>
-      <h3>Markup slotted from the light dom and styles applied by the host app!</h3>
+        <h3>
+          Markup slotted from the light dom and styles applied by the host app!
+        </h3>
         <slot
           name="test-markup"
           @slotchange=${(event: { target: HTMLSlotElement }) => {
@@ -85,8 +87,11 @@ export class Promo extends LitElement {
         </slot>
       </section>
       <section>
-      <h3>Markup applied by the host app and styles slotted from the light dom!</h3>
-        <slot name="test-styles"
+        <h3>
+          Markup applied by the host app and styles slotted from the light dom!
+        </h3>
+        <slot
+          name="test-styles"
           @slotchange=${(event: { target: HTMLSlotElement }) => {
             addMarkupToElements(
               event.target.assignedElements(),
@@ -97,7 +102,10 @@ export class Promo extends LitElement {
         </slot>
       </section>
       <section>
-        <h3>Box components with custom markup and styles generated dynamically from an API endpoint!</h3>
+        <h3>
+          Box components with custom markup and styles generated dynamically
+          from an API endpoint!
+        </h3>
         ${until(
           this.list.then((data) => {
             return html`${repeat(

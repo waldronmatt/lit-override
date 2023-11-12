@@ -2,7 +2,8 @@ import { CSSResult } from "lit";
 import { supportsAdoptingStyleSheets } from "@lit/reactive-element";
 
 /**
- * Applies the given style using `adoptedStyleSheets`.
+ * Applies the given style using `adoptedStyleSheets`. Behavior adopted from `adoptStyles`:
+ * https://github.com/lit/lit/blob/main/packages/reactive-element/src/css-tag.ts#L170
  *
  * **Note**: Appends the style to the `shadowroot` of elements for browser fallback.
  *

@@ -1,7 +1,8 @@
 import { TemplateResult } from "lit";
 
 /**
- * Applies the given template to the `shadowRoot` of elements.
+ * Applies the given template to the `shadowRoot` of elements. Behavior adopted from `TemplateContentDirective`:
+ * https://github.com/lit/lit/blob/main/packages/lit-html/src/directives/template-content.ts#L10
  *
  * **Note**: Custom elements provided must be configured to accept templates via a
  * `_template` state decorator and the `templateContent` directive: `templateContent(this._template)`
