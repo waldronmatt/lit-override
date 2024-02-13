@@ -1,3 +1,5 @@
+# MOVED - The code for this will be maintained [here](https://github.com/waldronmatt/groundwork/tree/main/packages/lit-override#readme) moving forward.
+
 # Lit Override
 
 A demo site that utilizes a generic lit web component and utilities to customize/override styles and markup.
